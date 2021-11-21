@@ -1,52 +1,67 @@
+<section class="highlight-clean">
+  <div class="container">
+    <div class="intro">
+      <h2 class="text-center">Welcome to Recipe Finder!</h2>
+      <p class="text-center">
+        How to use it? Simply list ingredients from your pantry, submit, and see what happens!
+      </p>
+    </div>
+  </div>
+</section>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
       <div class="m-3">
-        <h1>
-          Find recipes
-        </h1>
-        <div class="row g-3">
-          <div class="col-auto">
-            <input type="text" [(ngModel)]="ingredientToAdd" class="form-control" placeholder="Ingredient" list="ingredients">
-            <datalist id="ingredients">
-              <option *ngFor="let ingredient of allIngredients" [value]="ingredient"> {{ ingredient }}</option>
-            </datalist>
+        <div class="ingredients-section shadow">
+          <h4>
+            Add ingredients
+          </h4>
+          <div class="row g-3">
+            <div class="col-auto">
+              <input type="text" [(ngModel)]="ingredientToAdd" class="form-control" placeholder="Ingredient" list="ingredients">
+              <datalist id="ingredients">
+                <option *ngFor="let ingredient of allIngredients" [value]="ingredient"> {{ ingredient }}</option>
+              </datalist>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-primary" (click)="addIngredient()"><i class="bi bi-plus-circle"></i></button>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-success" (click)="getRecipeList()">
+                <span *ngIf="done == false" class="spinner-border" role="status" style="height: 16px; width: 16px"></span> Submit
+              </button>
+            </div>
           </div>
-          <div class="col-auto">
-            <button class="btn btn-primary" (click)="addIngredient()">Add <i class="bi bi-plus-circle"></i></button>
+          <div class="mt-4">
+            <div *ngIf="myIngredients.length === 0">
+              No ingredients were added yet.
+            </div>
+            <table class="table table-borderless">
+              <tr *ngFor="let ingr of myIngredients">
+                <td class="text-capitalize">
+                  {{ ingr }}
+                </td>
+                <td class="p-2">
+                  <a class="text-danger" (click)="removeIngredient(ingr)" style="cursor: pointer">Remove</a>
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
-        <div class="mt-4">
-          <h2>
-            Added ingredients
-          </h2>
-          <div *ngIf="myIngredients.length === 0">
-            No ingredients were added yet.
-          </div>
-          <ul *ngFor="let ingr of myIngredients" class="list-group">
+      </div>
+    </div>
+    <div *ngIf="done" class="col-12 col-md-4">
+      <div class="m-3">
+        <div style="height: 45em" class="overflow-auto">
+          <ul class="list-group" *ngFor="let entry of recipeList">
             <li class="list-group-item">
-              {{ ingr }}
-              <br>
-              <button class="btn btn-danger mt-2" (click)="removeIngredient(ingr)"><i class="bi bi-trash"></i></button>
+              <div><a href="{{ entry['url'] }}">{{ entry['name'] }}</a></div>
+              <div>Matches: {{ entry['count'] }} <i>{{ ingredientsToString(entry['ingredients']) }}</i></div>
             </li>
           </ul>
         </div>
-        <button class="btn btn-primary btn-lg mt-3" (click)="getRecipeList()">
-          Look for recipes
-        </button>
       </div>
-    </div>
-    <div *ngIf="done" class="col-12 col-md-5">
-      <div class="m-3">
-        <ul class="list-group" *ngFor="let entry of recipeList">
-          <li class="list-group-item">
-            <div>Name: {{ entry['name'] }}</div>
-            <div><a href="{{ entry['url'] }}">View</a></div>
-            <div>Matches: {{ entry['count'] }}</div>
-            <span *ngFor="let item of entry['ingredients']">{{ item + ' ' }}</span>
-          </li>
-        </ul>
-      </div>
+
     </div>
   </div>
 </div>

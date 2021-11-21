@@ -1,0 +1,32 @@
+.highlight-clean {
+  color: #313437;
+  background-color: #f3eeee;
+  padding: 6em 0;
+}
+
+.highlight-clean p {
+  color: #7d8285;
+}
+
+.highlight-clean h2 {
+  font-weight: bold;
+  margin-bottom: 25px;
+  line-height: 1.5;
+  padding-top: 0;
+  margin-top: 0;
+  color: inherit;
+}
+
+.highlight-clean .intro {
+  font-size: 18px;
+  max-width: 500px;
+  margin: 0 auto 25px;
+}
+
+.ingredients-section {
+  font-size: 18px;
+  color: #313437;
+  background-color: aliceblue;
+  border-style: initial;
+  padding: 20px 20px 20px 20px;
+}

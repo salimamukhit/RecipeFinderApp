@@ -29,10 +29,12 @@ export class RecipesComponent implements OnInit {
    * Adds ingredient to ingredients list
    */
   addIngredient(): void {
-    if(this.myIngredients.indexOf(this.ingredientToAdd) < 0) {
-      this.myIngredients.push(this.ingredientToAdd);
+    if(this.ingredientToAdd != '') {
+      if(this.myIngredients.indexOf(this.ingredientToAdd) < 0) {
+        this.myIngredients.push(this.ingredientToAdd);
+      }
+      this.ingredientToAdd = '';
     }
-    this.ingredientToAdd = '';
   }
 
   /**
@@ -49,7 +51,6 @@ export class RecipesComponent implements OnInit {
    */
   getAllIngredients(): void {
     this.recipeService.getAllIngredients().then((result: any) => {
-      console.log(result);
       this.allIngredients = result;
     });
   }
@@ -62,7 +63,6 @@ export class RecipesComponent implements OnInit {
       let query = this.prepareQuery();
       this.done = false;
       this.recipeService.getRecipeList(query).then((result: any) => {
-        console.log(result);
         this.sortResult(result);
       });
     }
@@ -75,6 +75,9 @@ export class RecipesComponent implements OnInit {
   sortResult(result: any): void {
     this.recipeList = [];
     for(let entry of result) {
+      if(this.recipeList.findIndex((item: any) => item['name'] == entry['name']) >= 0) {
+        continue;
+      }
       let recipeName = entry['name'];
       let url = entry['url'];
       let ingredients = [];
@@ -107,5 +110,15 @@ export class RecipesComponent implements OnInit {
     query = query.substring(0, query.length - 1);
 
     return query;
+  }
+
+  ingredientsToString(ingredients: string[]): string {
+    let result = '(';
+    for(let i = 0; i < ingredients.length - 1; i++) {
+      result = result + ingredients[i] + ', ';
+    }
+    result += ingredients[ingredients.length - 1] + ')';
+
+    return result;
   }
 }
