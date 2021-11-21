@@ -7,34 +7,46 @@ import {RecipeService} from "../../services/recipe.service";
   styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
+  // An single ingredient a user adds to a list
   ingredientToAdd = '';
+  // A list of ingredients added
   myIngredients: string[] = [];
-
+  // All available ingredients (retrieved from a database)
   allIngredients: any;
-
+  // A list of recipes that contains ingredients a user has
   recipeList: any;
-
+  // A boolean flag that signifies if query is done processing
   done: boolean | undefined;
 
   constructor(private recipeService: RecipeService) { }
 
   ngOnInit(): void {
     this.ingredientToAdd = '';
-    this.done = false;
     this.getAllIngredients();
   }
 
+  /**
+   * Adds ingredient to ingredients list
+   */
   addIngredient(): void {
     if(this.myIngredients.indexOf(this.ingredientToAdd) < 0) {
       this.myIngredients.push(this.ingredientToAdd);
-      this.ingredientToAdd = '';
     }
+    this.ingredientToAdd = '';
   }
 
+  /**
+   * Removes an ingredient from ingredients list
+   * @param ingredient an ingredient to remove
+   */
   removeIngredient(ingredient: string): void {
     this.myIngredients.splice(this.myIngredients.indexOf(ingredient), 1);
   }
 
+  /**
+   * A method that is called upon initialization.
+   * Gets all available ingredients
+   */
   getAllIngredients(): void {
     this.recipeService.getAllIngredients().then((result: any) => {
       console.log(result);
@@ -42,41 +54,47 @@ export class RecipesComponent implements OnInit {
     });
   }
 
+  /**
+   * Main query that gets list of recipes that can be cooked
+   */
   getRecipeList(): void {
-    let query = this.prepareQuery();
-    this.recipeService.getRecipeList(query).then((result: any) => {
-      console.log(result);
-      this.sortResult(result);
-    });
+    if(this.myIngredients.length > 0) {
+      let query = this.prepareQuery();
+      this.done = false;
+      this.recipeService.getRecipeList(query).then((result: any) => {
+        console.log(result);
+        this.sortResult(result);
+      });
+    }
   }
 
+  /**
+   * Sorts the recipe list for user comprehension
+   * @param result a JSON result
+   */
   sortResult(result: any): void {
     this.recipeList = [];
-    let resultMap = new Map<string, number>();
-
     for(let entry of result) {
-      if(resultMap.has(entry['url'])) {
-        let count = resultMap.get(entry['url']);
-        if(count) {
-          resultMap.set(entry['url'], count + 1);
+      let recipeName = entry['name'];
+      let url = entry['url'];
+      let ingredients = [];
+      for(let item of this.myIngredients) {
+        let i = entry['ingredients'].findIndex((entry: any) => entry['name'] == item);
+        if(i >= 0) {
+          let ingredient = entry['ingredients'][i]['name'];
+          if(ingredients.indexOf(ingredient) < 0) ingredients.push(entry['ingredients'][i]['name']);
         }
-      } else {
-        resultMap.set(entry['url'], 1);
       }
-    }
-
-    for(let key of resultMap.keys()) {
-      let recipeName = result.find((entry: any) => entry['url'] == key)['name'];
-      let item = { 'name': recipeName, 'url': key, 'count': resultMap.get(key) };
+      let item = { 'name': recipeName, 'url': url, 'count': ingredients.length, 'ingredients': ingredients };
       this.recipeList.push(item);
     }
-
-    this.recipeList.sort((a: any, b: any) => {return b['count'] - a['count']});
-
+    this.recipeList.sort((a: any, b: any) => { return b['count'] - a['count'] });
     this.done = true;
-
   }
 
+  /**
+   * A helper method that prepares a string for querying
+   */
   prepareQuery(): string {
     let query = '';
 

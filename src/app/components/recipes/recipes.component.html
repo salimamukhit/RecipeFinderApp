@@ -1,39 +1,49 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12 col-md-4">
-      <h1>
-        Find recipes
-      </h1>
-      <div class="form-group">
-        <input type="text" [(ngModel)]="ingredientToAdd" class="form-control" placeholder="Ingredient" >
-        <button class="btn btn-primary mt-2" (click)="addIngredient()">Add <i class="bi bi-plus-circle"></i></button>
-      </div>
-      <div class="mt-2">
-        <h3>
-          Added ingredients
-        </h3>
-        <div *ngIf="myIngredients.length === 0">
-          No ingredients were added yet.
+      <div class="m-3">
+        <h1>
+          Find recipes
+        </h1>
+        <div class="row g-3">
+          <div class="col-auto">
+            <input type="text" [(ngModel)]="ingredientToAdd" class="form-control" placeholder="Ingredient" list="ingredients">
+            <datalist id="ingredients">
+              <option *ngFor="let ingredient of allIngredients" [value]="ingredient"> {{ ingredient }}</option>
+            </datalist>
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-primary" (click)="addIngredient()">Add <i class="bi bi-plus-circle"></i></button>
+          </div>
         </div>
-        <ul *ngFor="let ingr of myIngredients" class="list-group">
-          <li class="list-group-item">
-            {{ ingr }}
-            <br>
-            <button class="btn btn-danger" (click)="removeIngredient(ingr)"><i class="bi bi-trash"></i></button>
-          </li>
-        </ul>
+        <div class="mt-4">
+          <h2>
+            Added ingredients
+          </h2>
+          <div *ngIf="myIngredients.length === 0">
+            No ingredients were added yet.
+          </div>
+          <ul *ngFor="let ingr of myIngredients" class="list-group">
+            <li class="list-group-item">
+              {{ ingr }}
+              <br>
+              <button class="btn btn-danger mt-2" (click)="removeIngredient(ingr)"><i class="bi bi-trash"></i></button>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-primary btn-lg mt-3" (click)="getRecipeList()">
+          Look for recipes
+        </button>
       </div>
-      <button class="btn btn-primary btn-lg mt-3" (click)="getRecipeList()">
-        Look for recipes
-      </button>
     </div>
     <div *ngIf="done" class="col-12 col-md-5">
-      <div class="mt-3">
+      <div class="m-3">
         <ul class="list-group" *ngFor="let entry of recipeList">
           <li class="list-group-item">
             <div>Name: {{ entry['name'] }}</div>
             <div><a href="{{ entry['url'] }}">View</a></div>
             <div>Matches: {{ entry['count'] }}</div>
+            <span *ngFor="let item of entry['ingredients']">{{ item + ' ' }}</span>
           </li>
         </ul>
       </div>
