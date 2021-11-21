@@ -13,6 +13,10 @@ export class RecipesComponent implements OnInit {
   myIngredients: string[] = [];
   // All available ingredients (retrieved from a database)
   allIngredients: any;
+  // All available recipes (retrieved from a database)
+  allRecipes: any;
+  // A random recipe for display
+  randomRecipe: any;
   // A list of recipes that contains ingredients a user has
   recipeList: any;
   // A boolean flag that signifies if query is done processing
@@ -23,6 +27,25 @@ export class RecipesComponent implements OnInit {
   ngOnInit(): void {
     this.ingredientToAdd = '';
     this.getAllIngredients();
+    this.getRandomRecipe();
+  }
+
+  /**
+   * A method that is called upon initialization.
+   * Gets all available ingredients
+   */
+  getAllIngredients(): void {
+    this.recipeService.getAllIngredients().then((result: any) => {
+      this.allIngredients = result;
+    });
+  }
+
+  getRandomRecipe(): void {
+    this.recipeService.getAllRecipes().then((result: any) => {
+      this.allRecipes = result;
+      let index = Math.floor(Math.random() * (this.allRecipes.length - 1));
+      this.randomRecipe = this.allRecipes[index];
+    });
   }
 
   /**
@@ -43,16 +66,6 @@ export class RecipesComponent implements OnInit {
    */
   removeIngredient(ingredient: string): void {
     this.myIngredients.splice(this.myIngredients.indexOf(ingredient), 1);
-  }
-
-  /**
-   * A method that is called upon initialization.
-   * Gets all available ingredients
-   */
-  getAllIngredients(): void {
-    this.recipeService.getAllIngredients().then((result: any) => {
-      this.allIngredients = result;
-    });
   }
 
   /**

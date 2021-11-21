@@ -30,9 +30,20 @@ export class RecipeService {
    * Gets all recipes that contain certain ingredients
    * @param ingredients
    */
-  public getRecipeList(ingredients: string) {
+  public getRecipeList(ingredients: string): Promise<any> {
     return new Promise(resolve => {
       this.http.get('http://localhost:9000/recipes/list/' + ingredients)
+        .subscribe(response => {
+          resolve(response);
+        }, error => {
+          console.log(error.status);
+        });
+    });
+  }
+
+  public getAllRecipes(): Promise<any> {
+    return new Promise(resolve => {
+      this.http.get('http://localhost:9000/recipes')
         .subscribe(response => {
           resolve(response);
         }, error => {
