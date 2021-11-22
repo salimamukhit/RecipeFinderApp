@@ -115,8 +115,6 @@ export class RecipesComponent implements OnInit {
     let query = '';
 
     for(let str of this.myIngredients) {
-      str = str.replace("'", "''");
-      str = "'" + str + "'";
       query = query + str + ",";
     }
 
