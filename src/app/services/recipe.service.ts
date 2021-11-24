@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class RecipeService {
    */
   public getAllIngredients(): Promise<any> {
     return new Promise(resolve => {
-      this.http.get('http://localhost:9000/ingredients')
+      this.http.get(environment.api_url + '/ingredients')
         .subscribe(response => {
           resolve(response);
         }, error => {
@@ -32,7 +33,7 @@ export class RecipeService {
    */
   public getRecipeList(ingredients: string): Promise<any> {
     return new Promise(resolve => {
-      this.http.get('http://localhost:9000/recipes/list/' + ingredients)
+      this.http.get(environment.api_url + '/recipes/list/' + ingredients)
         .subscribe(response => {
           resolve(response);
         }, error => {
@@ -43,7 +44,7 @@ export class RecipeService {
 
   public getAllRecipes(): Promise<any> {
     return new Promise(resolve => {
-      this.http.get('http://localhost:9000/recipes')
+      this.http.get(environment.api_url + '/recipes')
         .subscribe(response => {
           resolve(response);
         }, error => {

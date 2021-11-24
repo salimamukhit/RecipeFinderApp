@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {RecipeService} from "../../services/recipe.service";
+import { RecipeService } from "../../services/recipe.service";
 
 @Component({
   selector: 'app-recipes',
@@ -40,6 +40,9 @@ export class RecipesComponent implements OnInit {
     });
   }
 
+  /**
+   * Gets a random recipe from the list of recipes
+   */
   getRandomRecipe(): void {
     this.recipeService.getAllRecipes().then((result: any) => {
       this.allRecipes = result;
@@ -123,6 +126,10 @@ export class RecipesComponent implements OnInit {
     return query;
   }
 
+  /**
+   * A helper method that converts a list of matched ingredients to string for display
+   * @param ingredients a list of ingredients in one recipe
+   */
   ingredientsToString(ingredients: string[]): string {
     let result = '(';
     for(let i = 0; i < ingredients.length - 1; i++) {
