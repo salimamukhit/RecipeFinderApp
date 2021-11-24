@@ -6,7 +6,6 @@ import { environment } from "../../environments/environment";
   providedIn: 'root'
 })
 export class RecipeService {
-
   /**
    * A constructor
    * @param http an HTTP client to make requests to the API
@@ -42,6 +41,9 @@ export class RecipeService {
     });
   }
 
+  /**
+   * Gets all available recipes
+   */
   public getAllRecipes(): Promise<any> {
     return new Promise(resolve => {
       this.http.get(environment.api_url + '/recipes')
