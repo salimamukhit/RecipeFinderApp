@@ -14,15 +14,17 @@
       <div class="m-3">
         <div class="card shadow">
           <div class="card-header" style="height: 70px">
-            <h5><a href="{{ randomRecipe['url'] }}">Random Recipe: {{ randomRecipe['name'] }}</a></h5>
+            <h5 *ngIf="randomRecipe"><a href="{{ randomRecipe['url'] }}">Random Recipe: {{ randomRecipe['name'] }}</a></h5>
           </div>
           <div class="card-body overflow-auto" style="height: 700px">
-            <p><b>You will need: </b></p>
-            <ul *ngFor="let item of randomRecipe['ingredients']" class="list-group">
-              <li class="list-group-item text-capitalize">
-                {{ item['name'] }}
-              </li>
-            </ul>
+            <div *ngIf="randomRecipe">
+              <p><b>You will need: </b></p>
+              <ul *ngFor="let item of randomRecipe['ingredients']" class="list-group">
+                <li class="list-group-item text-capitalize">
+                  {{ item['name'] }}
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="card-footer">
             <button class="btn btn-lf btn-secondary" (click)="getRandomRecipe()" title="Get random recipe">
