@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import { environment } from "../../environments/environment";
 
 @Injectable({
@@ -31,8 +31,9 @@ export class RecipeService {
    * @param ingredients
    */
   public getRecipeList(ingredients: string): Promise<any> {
+    const params = new HttpParams().set('ingredients', ingredients);
     return new Promise(resolve => {
-      this.http.get(environment.api_url + '/recipes/list/' + ingredients)
+      this.http.get(environment.api_url + '/recipes/list', { params: params })
         .subscribe(response => {
           resolve(response);
         }, error => {

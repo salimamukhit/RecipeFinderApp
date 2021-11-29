@@ -115,7 +115,7 @@ export class RecipesComponent implements OnInit {
    * A helper method that prepares a string for querying
    */
   prepareQuery(): string {
-    let query = '';
+    let query: any = '';
 
     for(let str of this.myIngredients) {
       query = query + str + ',';
@@ -123,7 +123,7 @@ export class RecipesComponent implements OnInit {
 
     query = query.substring(0, query.length - 1);
 
-    query = query.replace(' ', '+');
+    query = String(query.replaceAll(' ', '+'));
 
     return query;
   }
